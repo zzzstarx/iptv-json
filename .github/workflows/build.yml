@@ -1,0 +1,46 @@
+name: build-json
+
+on:
+  schedule:
+    # 每 6 小时跑一次。GitHub 的 cron 用 UTC，且有队列延迟（高峰期可能晚十几分钟）
+    - cron: '0 */6 * * *'
+  workflow_dispatch:        # 允许在网页上手动点一下就跑
+  push:
+    paths:
+      - 'sources.json'
+      - 'build.py'
+      - 'convert.py'
+
+permissions:
+  contents: write           # 需要回写 dist/ 里的产物
+
+concurrency:
+  group: build-json
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build JSON
+        run: python build.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f dist/
+          if git diff --staged --quiet; then
+            echo "内容无变化，跳过提交"
+          else
+            git commit -m "chore: refresh json [skip ci]"
+            git push
+          fi

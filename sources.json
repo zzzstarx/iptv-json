@@ -1,0 +1,10 @@
+{
+  "_comment": "输出文件名 -> 上游 m3u 地址。加一行就多一个产物。",
+  "outputs": [
+    {
+      "file": "Gather.json",
+      "source": "https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u",
+      "note": "YanG-1989 聚合源（咪咕/赛事/轮播）"
+    }
+  ]
+}
