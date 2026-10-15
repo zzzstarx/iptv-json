@@ -3,3 +3,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .tmp-*.json
+_push.ps1
+DEPLOY_KEY.txt
+.gh_token*
+Gather.m3u
